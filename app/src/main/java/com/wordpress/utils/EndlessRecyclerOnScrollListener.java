@@ -1,4 +1,4 @@
-package com.wordpress;
+package com.wordpress.utils;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;

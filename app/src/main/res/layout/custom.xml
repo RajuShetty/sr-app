@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:background="#fff">
 
-                <ImageView
+                <WebView
                     android:id="@+id/image"
                     android:layout_width="fill_parent"
                     android:layout_height="180dip"
@@ -41,7 +41,7 @@
                     android:layout_marginRight="16.0dip"
                     android:layout_marginTop="-30.0dip"
                     android:elevation="4dp"
-                    app:srcCompat="@drawable/share_variant" />
+                    app:srcCompat="@drawable/heart_white" />
 
                 <TextView
                     android:id="@+id/title"

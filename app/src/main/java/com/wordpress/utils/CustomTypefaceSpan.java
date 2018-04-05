@@ -1,4 +1,4 @@
-package com.wordpress;
+package com.wordpress.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -7,6 +7,8 @@ import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
 import android.text.style.TypefaceSpan;
+
+import com.wordpress.R;
 
 /**
  * Created by wail babou on 2016-12-24.
@@ -54,6 +56,6 @@ public class CustomTypefaceSpan extends TypefaceSpan {
         paint.setTypeface(tf);
         paint.setTextSize(60);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(ContextCompat.getColor(context,R.color.colorPrimaryDark));
+        paint.setColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
     }
 }

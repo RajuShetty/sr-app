@@ -22,7 +22,7 @@
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
-            <ImageView
+            <WebView
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:scaleType="centerCrop"
@@ -75,16 +75,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        app:srcCompat="@drawable/share_variant"
+        app:fabSize="mini"
         app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|start" />
+        app:layout_anchorGravity="bottom|start"
+        app:srcCompat="@drawable/share_variant" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="90dp"
-        app:srcCompat="@drawable/laptop"
+        android:layout_marginLeft="70dp"
+        app:fabSize="mini"
         app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|start" />
+        app:layout_anchorGravity="bottom|start"
+        app:srcCompat="@drawable/laptop" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="120dp"
+        app:fabSize="mini"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|start"
+        app:srcCompat="@drawable/comment_text_w" />
 
 </android.support.design.widget.CoordinatorLayout>

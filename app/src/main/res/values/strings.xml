@@ -7,18 +7,8 @@
     <string name="action_settings">Settings</string>
 
     <!-- link of your wordpress api (/api/) -->
-    <string name="link">https://snapcata.com/api/</string>
-
-    <!-- Tabs Titles -->
-    <string name="AllCategories">Home</string>
-    <string name="Category1">Tech</string>
-    <string name="Category2">Science</string>
-    <string name="Category3">Sports</string>
-
-    <!-- categories Ids -->
-    <string name="CategoryID1">27</string>
-    <string name="CategoryID2">28</string>
-    <string name="CategoryID3">3</string>
+    <string name="link2">https://instrumentationtools.com/api/</string>
+    <string name="link">http://192.168.1.2/myprojects/wordpress/?json=</string>
 
     <!-- google play store app link -->
     <string name="playStoreLink">https://play.google.com/store/apps/details?id=PACKAGE</string>

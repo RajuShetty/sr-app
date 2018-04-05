@@ -9,12 +9,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.wordpress.Home.OpenArticle"
+        <activity android:name=".ui.Home.OpenArticle"
             android:theme="@style/AppTheme.NoActionBar"
             >
         </activity>
-        <activity android:name="com.wordpress.Splash"
-            android:theme="@style/AppTheme.NoActionBar"
+        <activity android:name="com.wordpress.ui.Splash"
+            android:theme="@style/AppTheme2"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,18 +22,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.wordpress.ContactActivity">
+        <activity
+            android:name=".ui.FavActivity"
+            android:label="@string/app_name"
+            />
+        <activity android:name="com.wordpress.ui.ContactActivity">
 
         </activity>
-        <activity android:name="com.wordpress.AboutActivity">
+        <activity android:name="com.wordpress.ui.AboutActivity">
 
         </activity>
         <activity
-            android:name="com.wordpress.MainActivity"
+            android:name="com.wordpress.ui.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
+        <activity android:name=".ui.Categories.GetCategoriesActivity" />
+        <activity android:name=".ui.Categories.OpenCategoryActivity" />
+        <activity android:name=".ui.Comments.CommentsActivity" />
+
+        <service android:name=".FCM.MyFCMService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".FCM.FCMRegistrationService" />
+        <service android:name=".FCM.FCMTokenRefreshListenerService" />
     </application>
 
 </manifest>

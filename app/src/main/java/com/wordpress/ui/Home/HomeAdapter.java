@@ -1,4 +1,4 @@
-package com.wordpress.Home;
+package com.wordpress.ui.Home;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,14 +12,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.wordpress.Article;
+import com.wordpress.modals.Article;
 import com.wordpress.R;
+import com.wordpress.SQLITE.DBHelper;
+import com.wordpress.utils.MyData;
 
 import java.util.ArrayList;
 
@@ -72,6 +72,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 "CaviarDreams.ttf");
         Typeface stc = Typeface.createFromAsset(context.getAssets(),
                 "stc.otf");
+        String replacedString = datasource.get(position).getImg_url().replace("localhost", "192.168.1.2");
+        datasource.get(position).setImg_url(replacedString);
 
         if (holder instanceof ViewHolder) {
             ViewHolder mholder = (ViewHolder) holder;
@@ -82,21 +84,12 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mholder.auther.setText(datasource.get(position).getAuther());
             mholder.auther.setTypeface(stc);
             Log.e("fab", pos + "");
-            if (pos == 0)
-                mholder.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.classColor1)));
-            else if (pos == 1)
-                mholder.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.classColor2)));
-            else if (pos == 2)
-                mholder.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.classColor3)));
-            else if (pos == 3)
-                mholder.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context, R.color.classColor4)));
-            Glide.with(context)
-                    .load(datasource.get(position).getImg_url())
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .crossFade()
-                    .fitCenter()
-                    .skipMemoryCache(true)
-                    .into(mholder.logo);
+
+            mholder.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context,
+                    MyData.categories.get(pos).getColor())));
+            mholder.logo.loadDataWithBaseURL(null, "<style> img{display: inline;height: auto; height:90%;} " +
+                    " iframe{display: inline;height: auto;max-width: 100%;}</style>"
+                    +"<center> <img src=\""+datasource.get(position).getImg_url()+"\" > </center>", "text/html", "UTF-8", null);
         } else if (holder instanceof LoadingViewHolder) {
             LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
@@ -114,13 +107,13 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView logo;
+        WebView logo;
         TextView title, auther, date;
         FloatingActionButton fab;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            logo = (ImageView) itemView.findViewById(R.id.image);
+            logo = itemView.findViewById(R.id.image);
             title = (TextView) itemView.findViewById(R.id.title);
             auther = (TextView) itemView.findViewById(R.id.auther);
             date = (TextView) itemView.findViewById(R.id.date);
@@ -144,17 +137,14 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View view) {
                     int position = getLayoutPosition();
-                    shareTextUrl(position);
+                    try {
+                        new DBHelper(context).addArticle(datasource.get(position));
+                    }catch (Exception e){
+                    }
                 }
             });
         }
-        private void shareTextUrl(int position) {
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_TEXT,
-                    context.getResources().getString(R.string.app_name)+":"+datasource.get(position).getArticle_url());
-            context.startActivity(Intent.createChooser(shareIntent, "Share link using"));
-        }
+
     }
 
     public class LoadingViewHolder extends RecyclerView.ViewHolder {

@@ -1,14 +1,16 @@
-package com.wordpress;
+package com.wordpress.modals;
+
+import java.util.ArrayList;
 
 /**
  * Created by wail babou on 2016-12-24.
  */
 
 public class Article {
-    String img_url,auther,title,date,content;
-    int id;
-    String article_url;
-
+    private String img_url,auther,title,date,content;
+    private int id, BDID,category_id;
+    private String article_url;
+    private ArrayList<ItemComment> comments;
 
     public Article(){
 
@@ -18,6 +20,30 @@ public class Article {
         this.title = title;
         this.auther = auther;
         this.date = date;
+    }
+
+    public ArrayList<ItemComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<ItemComment> comments) {
+        this.comments = comments;
+    }
+
+    public int getCategory_id() {
+        return category_id;
+    }
+
+    public void setCategory_id(int category_id) {
+        this.category_id = category_id;
+    }
+
+    public int getBDID() {
+        return BDID;
+    }
+
+    public void setBDID(int BDID) {
+        this.BDID = BDID;
     }
 
     public String getArticle_url() {

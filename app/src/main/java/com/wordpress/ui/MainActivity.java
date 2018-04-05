@@ -1,4 +1,4 @@
-package com.wordpress;
+package com.wordpress.ui;
 
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -9,10 +9,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatDelegate;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.util.Log;
-import android.view.SubMenu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -29,7 +28,13 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.wordpress.Home.HomeFragment;
+import com.wordpress.ui.Categories.GetCategoriesActivity;
+import com.wordpress.utils.CustomTypefaceSpan;
+import com.wordpress.FCM.FCMTokenRefreshListenerService;
+import com.wordpress.FCM.MyFCMService;
+import com.wordpress.R;
+import com.wordpress.ui.Home.HomeFragment;
+import com.wordpress.utils.MyData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,11 +50,15 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         setContentView(R.layout.activity_main);
+
+        startService(new Intent(this, MyFCMService.class));
+        startService(new Intent(this, FCMTokenRefreshListenerService.class));
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("");
-
+        getSupportActionBar().setTitle(R.string.app_name);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -59,22 +68,6 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        Menu m = navigationView.getMenu();
-        for (int i=0;i<m.size();i++) {
-            MenuItem mi = m.getItem(i);
-
-            //for aapplying a font to subMenu ...
-            SubMenu subMenu = mi.getSubMenu();
-            if (subMenu!=null && subMenu.size() >0 ) {
-                for (int j=0; j <subMenu.size();j++) {
-                    MenuItem subMenuItem = subMenu.getItem(j);
-                    applyFontToMenuItem(subMenuItem);
-                }
-            }
-
-            //the method we have create in activity
-            applyFontToMenuItem(mi);
-        }
         //......... start coding ......
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
@@ -102,36 +95,12 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onPageSelected(int position) {
                 MainActivity.this.position=position;
-                if(position==0)
-                {
-                    toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.classColor1));
-                    tabLayout.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.classColor1));
-                    changeStatuColor(R.color.classColor1);
-                    Log.d("colorchange",String.valueOf(position));
-                }
-                else if(position ==1)
-                {
-                    toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.classColor2));
-                    tabLayout.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.classColor2));
-                    changeStatuColor(R.color.classColor2);
-                    Log.d("colorchange", String.valueOf(position));
-                }
-                else if(position ==2)
-                {
-                    toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.classColor3));
-                    tabLayout.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.classColor3));
-                    changeStatuColor(R.color.classColor3);
-                    Log.d("colorchange", String.valueOf(position));
-                }
-                else if(position ==3)
-                {
-                    toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.classColor4));
-                    tabLayout.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.classColor4));
-                    changeStatuColor(R.color.classColor4);
-                    Log.d("colorchange", String.valueOf(position));
-                }
+                toolbar.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
+                        MyData.categories.get(position).getColor()));
 
-
+                tabLayout.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),
+                        MyData.categories.get(position).getColor()));
+                changeStatuColor(MyData.categories.get(position).getColor());
             }
 
             @Override
@@ -173,11 +142,9 @@ public class MainActivity extends AppCompatActivity
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new HomeFragment(0),getResources().getString(R.string.AllCategories));
-        adapter.addFrag(new HomeFragment(1), getResources().getString(R.string.Category1));
-        adapter.addFrag(new HomeFragment(2), getResources().getString(R.string.Category2));
-        adapter.addFrag(new HomeFragment(3), getResources().getString(R.string.Category3));
-
+        for(int i=0;i<MyData.categories.size();i++){
+            adapter.addFrag(new HomeFragment(i),MyData.categories.get(i).getCategory_title());
+        }
         viewPager.setAdapter(adapter);
     }
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -256,6 +223,10 @@ public class MainActivity extends AppCompatActivity
             startActivity(new Intent(this,AboutActivity.class));
         } else if (id == R.id.nav_manage) {
             shareTextUrl();
+        }else if(id == R.id.nav_fav){
+            startActivity(new Intent(this,FavActivity.class));
+        }else if(id == R.id.nav_categories){
+            startActivity(new Intent(this,GetCategoriesActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

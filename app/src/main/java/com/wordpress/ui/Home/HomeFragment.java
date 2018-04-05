@@ -1,4 +1,4 @@
-package com.wordpress.Home;
+package com.wordpress.ui.Home;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -18,9 +18,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.wordpress.Article;
-import com.wordpress.EndlessRecyclerOnScrollListener;
+import com.wordpress.modals.Article;
+import com.wordpress.modals.ItemComment;
+import com.wordpress.utils.EndlessRecyclerOnScrollListener;
 import com.wordpress.R;
+import com.wordpress.utils.MyData;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,7 +60,6 @@ public class HomeFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-
         return rootView;
     }
 
@@ -67,12 +68,9 @@ public class HomeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         if (position == 0)
             getAll(1);
-        else if (position == 1)
-            getByCategory(getResources().getString(R.string.CategoryID1),1);
-        else if (position == 2)
-            getByCategory(getResources().getString(R.string.CategoryID2),1);
-        else if (position == 3)
-            getByCategory(getResources().getString(R.string.CategoryID3),1);
+        else
+            getByCategory(MyData.categories.get(position).getCategory_id(),1);
+
 
         adapter = new HomeAdapter(getContext(), feed, position);
         recyclerView.setAdapter(adapter);
@@ -83,12 +81,8 @@ public class HomeFragment extends Fragment {
                 try {
                     if (position == 0){
                         getAll(next);
-                    } else if (position == 1)
-                        getByCategory(getResources().getString(R.string.CategoryID1),next);
-                    else if (position == 2)
-                        getByCategory(getResources().getString(R.string.CategoryID2),next);
-                    else if (position == 3)
-                        getByCategory(getResources().getString(R.string.CategoryID3),next);
+                    } else
+                        getByCategory(MyData.categories.get(position).getCategory_id(),1);
                     next++;
                 }catch (Exception e){
                 }
@@ -117,8 +111,8 @@ public class HomeFragment extends Fragment {
                         JSONObject json = jArray.getJSONObject(i);
                         Article n = new Article();
                         n.setArticle_url(json.getString("url"));
-                        if(!json.isNull("thumbnail")){
-                            n.setImg_url(json.getString("thumbnail"));
+                        if(json.getJSONObject("thumbnail_images")!=null){
+                            n.setImg_url(json.getJSONObject("thumbnail_images").getJSONObject("full").getString("url"));
                         }
                         n.setId(json.getInt("id"));
                         n.setTitle(json.getString("title"));
@@ -126,6 +120,7 @@ public class HomeFragment extends Fragment {
                         n.setDate(json.getString("date"));
                         JSONObject auth=json.getJSONObject("author");
                         n.setAuther(auth.getString("name"));
+
                         feed.add(n);
                     }
                 } catch (JSONException e) {
@@ -175,8 +170,8 @@ public class HomeFragment extends Fragment {
                         for (int i = 0; i < jArray.length(); i++) {
                             JSONObject json = jArray.getJSONObject(i);
                             Article n = new Article();
-                            if(!json.isNull("thumbnail")){
-                                n.setImg_url(json.getString("thumbnail"));
+                            if(json.getJSONObject("thumbnail_images")!=null){
+                                n.setImg_url(json.getJSONObject("thumbnail_images").getJSONObject("full").getString("url"));
                             }
                             n.setArticle_url(json.getString("url"));
                             n.setId(json.getInt("id"));
