@@ -8,14 +8,18 @@ import android.graphics.Typeface;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.wordpress.modals.Article;
 import com.wordpress.R;
 import com.wordpress.SQLITE.DBHelper;
@@ -72,24 +76,33 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 "CaviarDreams.ttf");
         Typeface stc = Typeface.createFromAsset(context.getAssets(),
                 "stc.otf");
-        String replacedString = datasource.get(position).getImg_url().replace("localhost", "192.168.1.2");
-        datasource.get(position).setImg_url(replacedString);
 
+        if( datasource.get(position).getImg_url()!=null){
+            String replacedString = datasource.get(position).getImg_url().replace("localhost", "192.168.1.2");
+            datasource.get(position).setImg_url(replacedString);
+        }
         if (holder instanceof ViewHolder) {
             ViewHolder mholder = (ViewHolder) holder;
-            mholder.title.setText(datasource.get(position).getTitle());
+            mholder.title.setText(Html.fromHtml(datasource.get(position).getTitle()).toString());
             mholder.title.setTypeface(stc);
             mholder.date.setText(datasource.get(position).getDate().substring(0, 10));
             mholder.date.setTypeface(caviar);
             mholder.auther.setText(datasource.get(position).getAuther());
             mholder.auther.setTypeface(stc);
-            Log.e("fab", pos + "");
 
-            mholder.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context,
-                    MyData.categories.get(pos).getColor())));
-            mholder.logo.loadDataWithBaseURL(null, "<style> img{display: inline;height: auto; height:90%;} " +
-                    " iframe{display: inline;height: auto;max-width: 100%;}</style>"
-                    +"<center> <img src=\""+datasource.get(position).getImg_url()+"\" > </center>", "text/html", "UTF-8", null);
+            try {
+                mholder.fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(context,
+                        MyData.categories.get(pos).getColor())));
+            }catch (Exception e){}
+            Glide
+                    .with(context)
+                    .load(datasource.get(position).getImg_url())
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true)
+                    .fitCenter()
+                    .placeholder(R.drawable.placeholder)
+                    .into(mholder.logo);
+
         } else if (holder instanceof LoadingViewHolder) {
             LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
@@ -107,7 +120,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        WebView logo;
+        ImageView logo;
         TextView title, auther, date;
         FloatingActionButton fab;
 

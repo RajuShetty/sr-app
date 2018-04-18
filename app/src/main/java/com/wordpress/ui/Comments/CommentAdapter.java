@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.wordpress.R;
 import com.wordpress.modals.ItemComment;
 
+import org.jsoup.Jsoup;
+
 import java.util.ArrayList;
 
 
@@ -50,10 +52,15 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (holder instanceof ViewHolder) {
             ViewHolder mholder=(ViewHolder) holder;
             mholder.username.setText(datasource.get(position).getUser());
-            mholder.date.setText(datasource.get(position).getDate());
-            mholder.comment.setText(datasource.get(position).getComment());
-
+            String date = datasource.get(position).getDate();
+            try {
+                mholder.date.setText(date.substring(0, Math.min(date.length(), 10)));
+            }catch (Exception e){}
+            mholder.comment.setText(html2text(datasource.get(position).getComment()));
         }
+    }
+    public static String html2text(String html) {
+        return Jsoup.parse(html).text();
     }
 
     @Override

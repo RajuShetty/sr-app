@@ -41,6 +41,8 @@
         <activity android:name=".ui.Categories.GetCategoriesActivity" />
         <activity android:name=".ui.Categories.OpenCategoryActivity" />
         <activity android:name=".ui.Comments.CommentsActivity" />
+        <activity android:name=".ui.dialogs.AddComment"
+            android:theme="@style/AppCompatAlertDialogStyle"/>
 
         <service android:name=".FCM.MyFCMService">
             <intent-filter>

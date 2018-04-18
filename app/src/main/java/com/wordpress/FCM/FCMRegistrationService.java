@@ -13,6 +13,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.wordpress.R;
 
 
 /**
@@ -39,7 +40,8 @@ public class FCMRegistrationService extends IntentService {
     }
 
     private void sendTokenToServer(final String token) {
-        String link = "http://192.168.1.2/myprojects/wordpress/?rest_route=/apnwp/register&os_type=android" +
+
+        String link = getString(R.string.linkPushNotif)+"?rest_route=/apnwp/register&os_type=android"+
                 "&device_token="+token;
         final StringRequest request = new StringRequest(Request.Method.GET
                 , link, new Response.Listener<String>() {

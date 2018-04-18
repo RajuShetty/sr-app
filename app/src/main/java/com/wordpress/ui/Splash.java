@@ -1,6 +1,8 @@
 package com.wordpress.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -12,81 +14,53 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.daimajia.androidanimations.library.Techniques;
 import com.wordpress.R;
 import com.wordpress.utils.MyData;
+
+import wail.splacher.com.splasher.lib.SplasherActivity;
+import wail.splacher.com.splasher.models.SplasherConfig;
+import wail.splacher.com.splasher.utils.Const;
 
 /**
  * Created by wail babou on 2016-12-24.
  */
 
-public class Splash extends AppCompatActivity {
-    private static int SPLASH_TIME_OUT = 3000;
+public class Splash extends SplasherActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash);
-
-        new Handler().postDelayed(new Runnable() {
-
-            /*
-             * Showing splash screen with a timer. This will be useful when you
-             * want to show case your app logo / company
-             */
-
-            @Override
-            public void run() {
-                // This method will be executed once the timer is over
-                // Start your app main activity
-                MyData.addCategories();
-                //sendTokenToServer(FirebaseInstanceId.getInstance().getToken());
-                Intent i = new Intent(Splash.this, MainActivity.class);
-                startActivity(i);
-                // close this activity
-                finish();
-            }
-        }, SPLASH_TIME_OUT);
+    public void initSplasher(SplasherConfig config) {
+        config.setReveal_start(Const.START_TOP_LEFT) // anitmation type ..
+                //---------------
+                .setAnimationDuration(5000) // Reveal animation duration ..
+                //---------------
+                .setLogo(R.drawable.applogo) // logo src..
+                .setLogo_animation(Techniques.BounceIn) // logo animation ..
+                .setAnimationLogoDuration(2000) // logo animation duration ..
+                .setLogoWidth(500) // logo width ..
+                //---------------
+                .setTitle(getString(R.string.app_name)) // title ..
+                .setTitleColor(Color.parseColor("#ffffff")) // title color ..
+                .setTitleAnimation(Techniques.Bounce) // title animation ( from Android View Animations ) ..
+                .setTitleSize(24) // title text size ..
+                //---------------
+                .setSubtitle(getString(R.string.subtitle)) // subtitle
+                .setSubtitleColor(Color.parseColor("#ffffff")) // subtitle color
+                .setSubtitleAnimation(Techniques.FadeIn) // subtitle animation (from Android View Animations) ..
+                .setSubtitleSize(16)
+                .setTitleTypeFace(Typeface.createFromAsset(getAssets(),"CaviarDreams.ttf"));
     }
-    private void sendTokenToServer(final String token) {
-        Log.e("token",token);
-        String link = "http://192.168.1.2/myprojects/wordpress/?rest_route=/apnwp/register&os_type=android" +
-                "&device_token="+token;
-        final StringRequest request = new StringRequest(Request.Method.GET
-                , link, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.e("fcm fcm",response);
-                if(response
-                        .equals("{\"isError\":\"false\",\"error\":\"200\",\"SuccessMessage\":\"User successfully added in wpuser table\"}")){
 
-                    Log.e("Registration Service", "Response : Send Token Success");
-
-                } else {
-                    Log.e("Registration Service", "Response : Send Token Failed");
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("Registration Service", "Error :Send Token Failed"+ error);
-            }
-        });
-        request.setRetryPolicy(new RetryPolicy() {
-            @Override
-            public int getCurrentTimeout() {
-                return 100000;
-            }
-
-            @Override
-            public int getCurrentRetryCount() {
-                return 100000;
-            }
-
-            @Override
-            public void retry(VolleyError error) throws VolleyError {
-
-            }
-        });
-        Volley.newRequestQueue(this).add(request);
+    @Override
+    public void onSplasherFinished() {
+        // This method will be executed once the timer is over
+        // Start your app main activity
+        MyData.addCategories();
+        //sendTokenToServer(FirebaseInstanceId.getInstance().getToken());
+        Intent i = new Intent(Splash.this, MainActivity.class);
+        startActivity(i);
+        // close this activity
+        finish();
     }
+
 }

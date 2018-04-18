@@ -1,14 +1,17 @@
 <resources>
     <!-- Application name -->
     <string name="app_name">Ultimate Wordpress App</string>
+    <string name="subtitle">Stay updated ..</string>
+
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
 
     <!-- link of your wordpress api (/api/) -->
-    <string name="link2">https://instrumentationtools.com/api/</string>
     <string name="link">http://192.168.1.2/myprojects/wordpress/?json=</string>
+    <!-- put just the link of your wordpress website with / at the end -->
+    <string name="linkPushNotif">http://192.168.1.2/myprojects/wordpress/</string>
 
     <!-- google play store app link -->
     <string name="playStoreLink">https://play.google.com/store/apps/details?id=PACKAGE</string>

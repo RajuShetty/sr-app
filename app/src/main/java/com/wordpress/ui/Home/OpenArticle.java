@@ -11,8 +11,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.wordpress.R;
 import com.wordpress.ui.Comments.CommentsActivity;
 
@@ -23,7 +26,7 @@ import com.wordpress.ui.Comments.CommentsActivity;
 public class OpenArticle  extends AppCompatActivity{
     TextView title;
     WebView web;
-    WebView image;
+    ImageView image;
     FloatingActionButton share,pc,comment;
     Intent data;
     Toolbar toolbar;
@@ -39,13 +42,16 @@ public class OpenArticle  extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         title= (TextView) findViewById(R.id.title);
         web= (WebView) findViewById(R.id.web);
-        image= (WebView) findViewById(R.id.imageheader);
+        image= findViewById(R.id.imageheader);
         data = getIntent();
-
-        image.loadDataWithBaseURL(null, "<style> img{display: inline;height: auto; height:90%;} " +
-                " iframe{display: inline;height: auto;max-width: 100%;}</style>"
-                +"<center> <img src=\""+data.getStringExtra("logo")+"\" > </center>", "text/html", "UTF-8", null);
-
+        Glide
+                .with(this)
+                .load(data.getStringExtra("logo"))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .fitCenter()
+                .placeholder(R.drawable.placeholder)
+                .into(image);
         title.setText(data.getStringExtra("title"));
         //web.getSettings().setJavaScriptEnabled(true);
         web.loadDataWithBaseURL("",data.getStringExtra("content"), "text/html", "UTF-8", "");

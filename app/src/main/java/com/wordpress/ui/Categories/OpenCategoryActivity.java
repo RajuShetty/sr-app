@@ -58,7 +58,7 @@ public class OpenCategoryActivity extends AppCompatActivity{
             public void onLoadMore(int current_page) {
                 // do something...
                 try {
-                    getByCategory(getIntent().getStringExtra("id"),1);
+                    getByCategory(getIntent().getStringExtra("id"),next);
                     next++;
                 }catch (Exception e){
                 }
@@ -66,19 +66,12 @@ public class OpenCategoryActivity extends AppCompatActivity{
         });
     }
     public void getByCategory(String category, int page) {
-        if(next>1&&feed.size()>0){
-            feed.add(null);
-            adapter.notifyItemInserted(feed.size()-1);
-        }
-        String url = getString(R.string.link)+ "get_category_posts/?id="+category+"&page="+page+"&?count=4";
+
+        String url = getString(R.string.link)+ "get_category_posts&id="+category+"&page="+page+"&count=4";
         StringRequest postrequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.e("response",response);
-                if(next>1&&feed.size()>0){
-                    feed.remove(feed.size()-1);
-                    //adapter.notifyItemRemoved(feed.size());
-                }
                 try {
                     JSONObject jObject = new JSONObject(response);
                     JSONArray jArray = jObject.getJSONArray("posts");

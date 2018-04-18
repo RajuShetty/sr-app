@@ -1,8 +1,10 @@
 package com.wordpress.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatDelegate;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,8 +29,15 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.wordpress.ui.Categories.GetCategoriesActivity;
 import com.wordpress.utils.CustomTypefaceSpan;
 import com.wordpress.FCM.FCMTokenRefreshListenerService;
@@ -46,12 +56,15 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar;
     int position;
     private AdView mAdView;
+    SharedPreferences preferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         setContentView(R.layout.activity_main);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         startService(new Intent(this, MyFCMService.class));
         startService(new Intent(this, FCMTokenRefreshListenerService.class));
@@ -108,12 +121,8 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-    }
-    private void applyFontToMenuItem(MenuItem mi) {
-        Typeface font = Typeface.createFromAsset(getAssets(), "stc.otf");
-        SpannableString mNewTitle = new SpannableString(mi.getTitle());
-        mNewTitle.setSpan(new CustomTypefaceSpan("" , font,this), 0 , mNewTitle.length(),  Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-        mi.setTitle(mNewTitle);
+        if (!preferences.getBoolean("token_sent", false))
+            sendTokenToServer(FirebaseInstanceId.getInstance().getToken());
     }
     private void changeTabsFont() {
         Typeface stc = Typeface.createFromAsset(getAssets(),
@@ -238,5 +247,51 @@ public class MainActivity extends AppCompatActivity
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT,"Download Our App:"+getResources().getString(R.string.playStoreLink));
         startActivity(Intent.createChooser(shareIntent, "Share link using"));
+    }
+    private void sendTokenToServer(final String token) {
+        String link = getString(R.string.linkPushNotif)+"?rest_route=/apnwp/register&os_type=android"+
+                "&device_token="+token;
+        final StringRequest request = new StringRequest(Request.Method.GET
+                , link, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.e("fcm fcm",response);
+                if(response
+                        .equals("{\"isError\":\"false\",\"error\":\"200\",\"SuccessMessage\":\"User successfully added in wpuser table\"}")){
+
+                    preferences.edit().putBoolean("token_sent", true).apply();
+                    Log.e("Registration Service", "Response : Send Token Success");
+
+                } else {
+                    preferences.edit().putBoolean("token_sent", false).apply();
+                    Log.e("Registration Service", "Response : Send Token Failed");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                preferences.edit().putBoolean("token_sent", false).apply();
+                Log.e("Registration Service", "Error :Send Token Failed"+ error);
+
+
+            }
+        });
+        request.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 100000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 100000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+
+            }
+        });
+        Volley.newRequestQueue(this).add(request);
     }
 }

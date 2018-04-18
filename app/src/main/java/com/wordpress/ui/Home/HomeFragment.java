@@ -41,7 +41,7 @@ public class HomeFragment extends Fragment {
     HomeAdapter adapter;
     ArrayList<Article> feed = new ArrayList<>();
     int position = 0;
-    int next=2;
+    int next=1;
     LinearLayoutManager layoutManager;
     public HomeFragment() {
 
@@ -56,7 +56,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment, container, false);
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.recy);
+        recyclerView = rootView.findViewById(R.id.recy);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
@@ -67,10 +67,11 @@ public class HomeFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (position == 0)
-            getAll(1);
+            getAll(next);
         else
-            getByCategory(MyData.categories.get(position).getCategory_id(),1);
+            getByCategory(MyData.categories.get(position).getCategory_id(),next);
 
+        next++;
 
         adapter = new HomeAdapter(getContext(), feed, position);
         recyclerView.setAdapter(adapter);
@@ -82,7 +83,7 @@ public class HomeFragment extends Fragment {
                     if (position == 0){
                         getAll(next);
                     } else
-                        getByCategory(MyData.categories.get(position).getCategory_id(),1);
+                        getByCategory(MyData.categories.get(position).getCategory_id(),next);
                     next++;
                 }catch (Exception e){
                 }
@@ -91,19 +92,12 @@ public class HomeFragment extends Fragment {
     }
 
     public void getByCategory(String category, int page) {
-        if(next>1&&feed.size()>0){
-            feed.add(null);
-            adapter.notifyItemInserted(feed.size()-1);
-        }
-        String url = getString(R.string.link)+ "get_category_posts/?id="+category+"&page="+page+"&?count=4";
+        final String url = getString(R.string.link)+ "get_category_posts&id="+category+"&page="+page+"&count=4";
         StringRequest postrequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.e("category",url);
                 Log.e("response",response);
-                if(next>1&&feed.size()>0){
-                    feed.remove(feed.size()-1);
-                    //adapter.notifyItemRemoved(feed.size());
-                }
                 try {
                     JSONObject jObject = new JSONObject(response);
                     JSONArray jArray = jObject.getJSONArray("posts");
@@ -149,20 +143,12 @@ public class HomeFragment extends Fragment {
     }
 
     public void getAll(final int page) {
-        if(next>1&&feed.size()>0){
-            feed.add(null);
-            adapter.notifyItemInserted(feed.size()-1);
-        }
-        String url = getString(R.string.link)+ "get_recent_posts/?count=4&page="+page;
+        String url = getString(R.string.link)+ "get_recent_posts&count=4&page="+page+"&count=4";
         StringRequest postrequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Log.e("response",response);
 
-                if(next>1&&feed.size()>0){
-                    feed.remove(feed.size()-1);
-                    //adapter.notifyItemRemoved(feed.size());
-                }
                 try {
                     JSONObject jObject = new JSONObject(response);
                     if(jObject.getInt("count")>0){

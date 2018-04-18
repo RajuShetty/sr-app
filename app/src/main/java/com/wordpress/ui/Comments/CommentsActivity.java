@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -18,7 +19,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.wordpress.R;
-import com.wordpress.modals.Article;
 import com.wordpress.modals.ItemComment;
 import com.wordpress.ui.dialogs.AddComment;
 
@@ -37,6 +37,7 @@ public class CommentsActivity extends AppCompatActivity {
     ArrayList<ItemComment> feed = new ArrayList<>();
     LinearLayoutManager layoutManager;
     String prod_id;
+    boolean comment_statement=false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,14 +60,18 @@ public class CommentsActivity extends AppCompatActivity {
         getData();
     }
     public void getData(){
-        String url = getString(R.string.link)+ "get_post/?id="+prod_id;
+        final String url = getString(R.string.link)+ "get_post&id="+prod_id;
         StringRequest postrequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.e("link",url);
                 Log.e("response",response);
                 try {
                     JSONObject jObject = new JSONObject(response);
                     JSONObject json = jObject.getJSONObject("post");
+                    if(json.getString("comment_status").equals("open")){
+                        comment_statement = true;
+                    }
                     // get comments
                     JSONArray comments = json.getJSONArray("comments");
                     for (int k = 0; k < comments.length(); k++) {
@@ -119,9 +124,13 @@ public class CommentsActivity extends AppCompatActivity {
                 onBackPressed();
                 break;
             case R.id.action_add_comment:
-                Intent ii = new Intent(this, AddComment.class);
-                ii.putExtra("commentPost",prod_id);
-                startActivityForResult(ii,96);
+                if(comment_statement){
+                    Intent ii = new Intent(this, AddComment.class);
+                    ii.putExtra("commentPost",prod_id);
+                    startActivityForResult(ii,96);
+                }else {
+                    Toast.makeText(this,"Sorry .Adding comments not available",Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
         return true;
