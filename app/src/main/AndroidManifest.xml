@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wordpress">
+    package="com.shubhasharon">
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -13,7 +13,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             >
         </activity>
-        <activity android:name="com.wordpress.ui.Splash"
+        <activity android:name="com.shubhasharon.ui.Splash"
             android:theme="@style/AppTheme2"
             >
             <intent-filter>
@@ -26,14 +26,14 @@
             android:name=".ui.FavActivity"
             android:label="@string/app_name"
             />
-        <activity android:name="com.wordpress.ui.ContactActivity">
+        <activity android:name="com.shubhasharon.ui.ContactActivity">
 
         </activity>
-        <activity android:name="com.wordpress.ui.AboutActivity">
+        <activity android:name="com.shubhasharon.ui.AboutActivity">
 
         </activity>
         <activity
-            android:name="com.wordpress.ui.MainActivity"
+            android:name="com.shubhasharon.ui.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
 

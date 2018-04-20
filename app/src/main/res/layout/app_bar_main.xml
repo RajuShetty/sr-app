@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
-    tools:context="com.wordpress.ui.MainActivity">
+    tools:context="com.shubhasharon.ui.MainActivity">
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="com.wordpress.ui.MainActivity">
+        tools:context="com.shubhasharon.ui.MainActivity">
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"

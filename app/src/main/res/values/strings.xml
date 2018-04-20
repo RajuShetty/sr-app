@@ -9,9 +9,9 @@
     <string name="action_settings">Settings</string>
 
     <!-- link of your wordpress api (/api/) -->
-    <string name="link">http://192.168.1.2/myprojects/wordpress/?json=</string>
+    <string name="link">http://shubhasharon.com/api/</string>
     <!-- put just the link of your wordpress website with / at the end -->
-    <string name="linkPushNotif">http://192.168.1.2/myprojects/wordpress/</string>
+    <string name="linkPushNotif">http://shubhasharon.com/</string>
 
     <!-- google play store app link -->
     <string name="playStoreLink">https://play.google.com/store/apps/details?id=PACKAGE</string>

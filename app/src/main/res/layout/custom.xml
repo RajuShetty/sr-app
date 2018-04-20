@@ -30,7 +30,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="180dip"
                     android:clickable="true"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="fitCenter" />
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/fab"
