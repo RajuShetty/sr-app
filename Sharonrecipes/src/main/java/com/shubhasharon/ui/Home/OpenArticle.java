@@ -96,10 +96,10 @@ public class OpenArticle  extends AppCompatActivity{
     private void shareTextUrl() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
-        String txt = "Recipe title :"+title.getText().toString()+" \n" +
-                "Recipe link: "+data.getStringExtra("ArticleUrl")+" \n" +
-                "Download Sharon's recipes app, to learn any recipe under just 5 mins \n" +
-                "App link: https://play.google.com/store/apps/details?id="+getPackageName();
+        String txt = "Recipe title :"+title.getText().toString()+" \n\n" +
+                "Recipe link: "+data.getStringExtra("ArticleUrl")+" \n\n" +
+                "Download Sharon's recipes app, to learn any recipe under just 5 mins \n\n" +
+                "https://play.google.com/store/apps/details?id="+getPackageName();
         shareIntent.putExtra(Intent.EXTRA_TEXT,
                 txt);
         startActivity(Intent.createChooser(shareIntent, "Share link using"));

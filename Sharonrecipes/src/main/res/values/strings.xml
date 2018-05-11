@@ -21,9 +21,9 @@
     <string name="Blog_FB_page">https://www.facebook.com/Dz.wail</string>
 
     <!-- About App message -->
-    <string name="aboutApp">This App developed By : </string>
-    <string name="developerName"> Ouail Bellal</string>
-    <string name="developer_FB_page">https://www.facebook.com/Dz.wail</string>
+    <string name="aboutApp">Sharon's recipes</string>
+    <string name="developerName"> Shubha sharon</string>
+    <string name="developer_FB_page">https://www.facebook.com/cookwithshubhasharon</string>
 
     <!-- AdMob Ids -->
     <string name="banner_home_footer">ca-app-pub-8533004717624284/5967770146</string>
