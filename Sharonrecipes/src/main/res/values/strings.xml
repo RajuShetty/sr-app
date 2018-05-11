@@ -1,0 +1,33 @@
+<resources>
+    <!-- Application name -->
+    <string name="app_name">Sharon recipes</string>
+    <string name="subtitle">Indian Veg and Non veg recipes</string>
+
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- link of your wordpress api (/api/) -->
+    <string name="link">http://shubhasharon.com/api/</string>
+    <!-- put just the link of your wordpress website with / at the end -->
+    <string name="linkPushNotif">http://shubhasharon.com/</string>
+
+    <!-- google play store app link -->
+    <string name="playStoreLink">https://play.google.com/store/apps/details?id=PACKAGE</string>
+
+    <!-- Contact us message -->
+    <string name="contactUs">our social media profiles </string>
+    <string name="Blog_FB_page">https://www.facebook.com/Dz.wail</string>
+
+    <!-- About App message -->
+    <string name="aboutApp">This App developed By : </string>
+    <string name="developerName"> Ouail Bellal</string>
+    <string name="developer_FB_page">https://www.facebook.com/Dz.wail</string>
+
+    <!-- AdMob Ids -->
+    <string name="banner_home_footer">ca-app-pub-8533004717624284/5967770146</string>
+
+
+
+</resources>
