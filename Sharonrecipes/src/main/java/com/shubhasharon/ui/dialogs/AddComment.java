@@ -81,7 +81,7 @@ public class AddComment extends AppCompatActivity {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        final String urlall = getString(R.string.link) + "submit_comment&" +
+        final String urlall = getString(R.string.link) + "submit_comment?" +
                 "post_id=" + comment_post +
                 "&name=" + name.getText().toString() +
                 "&email=" + email.getText().toString() +
