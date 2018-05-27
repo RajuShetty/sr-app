@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity
             sendTokenToServer(FirebaseInstanceId.getInstance().getToken());
 
     }
+
     private void changeTabsFont() {
         Typeface stc = Typeface.createFromAsset(getAssets(),
                 "arabic.ttf");
