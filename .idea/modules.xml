@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Sharonrecipes/Sharonrecipes.iml" filepath="$PROJECT_DIR$/Sharonrecipes/Sharonrecipes.iml" />
       <module fileurl="file://$PROJECT_DIR$/Wordpress custom.iml" filepath="$PROJECT_DIR$/Wordpress custom.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sr-app.iml" filepath="$PROJECT_DIR$/sr-app.iml" />
     </modules>
   </component>
 </project>

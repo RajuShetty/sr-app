@@ -100,5 +100,4 @@
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|start"
         app:srcCompat="@drawable/comment_text_w" />
-
-</android.support.design.widget.CoordinatorLayout>
+    </android.support.design.widget.CoordinatorLayout>
