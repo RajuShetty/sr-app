@@ -2,6 +2,7 @@ package com.shubhasharon.ui.Home;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +44,9 @@ public class HomeFragment extends Fragment {
     int position = 0;
     int next=1;
     LinearLayoutManager layoutManager;
+    private boolean _areLecturesLoaded = false;
+
+
     public HomeFragment() {
 
     }
@@ -66,29 +70,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (position == 0)
-            getAll(next);
-        else
-            getByCategory(MyData.categories.get(position).getCategory_id(),next);
 
-        next++;
-
-        adapter = new HomeAdapter(getContext(), feed, position);
-        recyclerView.setAdapter(adapter);
-        recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
-            @Override
-            public void onLoadMore(int current_page) {
-                // do something...
-                try {
-                    if (position == 0){
-                        getAll(next);
-                    } else
-                        getByCategory(MyData.categories.get(position).getCategory_id(),next);
-                    next++;
-                }catch (Exception e){
-                }
-            }
-        });
     }
 
     public void getByCategory(String category, int page) {
@@ -192,5 +174,44 @@ public class HomeFragment extends Fragment {
         postrequest.setRetryPolicy(new DefaultRetryPolicy(60000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         Volley.newRequestQueue(getContext()).add(postrequest);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && !_areLecturesLoaded) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    loadForFisrtSeen();
+                    _areLecturesLoaded = true;
+                }
+            }, 1000);
+        }
+    }
+    public void loadForFisrtSeen(){
+        if (position == 0)
+            getAll(next);
+        else
+            getByCategory(MyData.categories.get(position).getCategory_id(),next);
+
+        next++;
+
+        adapter = new HomeAdapter(getContext(), feed, position);
+        recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int current_page) {
+                // do something...
+                try {
+                    if (position == 0){
+                        getAll(next);
+                    } else
+                        getByCategory(MyData.categories.get(position).getCategory_id(),next);
+                    next++;
+                }catch (Exception e){
+                }
+            }
+        });
     }
 }

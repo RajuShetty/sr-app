@@ -65,7 +65,14 @@ public class CommentsActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Log.e("link",url);
-                Log.e("response",response);
+                //Log.e("response",response);
+                int maxLogSize = 1000;
+                for(int i = 0; i <= response.length() / maxLogSize; i++) {
+                    int start = i * maxLogSize;
+                    int end = (i+1) * maxLogSize;
+                    end = end > response.length() ? response.length() : end;
+                    Log.e("VV", response.substring(start, end));
+                }
                 try {
                     JSONObject jObject = new JSONObject(response);
                     JSONObject json = jObject.getJSONObject("post");
@@ -74,6 +81,8 @@ public class CommentsActivity extends AppCompatActivity {
                     }
                     // get comments
                     JSONArray comments = json.getJSONArray("comments");
+                    Log.e("comments",comments.toString());
+
                     for (int k = 0; k < comments.length(); k++) {
                         JSONObject current = comments.getJSONObject(k);
                         ItemComment cc = new ItemComment();
@@ -89,6 +98,12 @@ public class CommentsActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 adapter.notifyDataSetChanged();
+                //------popup
+                if(comment_statement){
+                    Intent ii = new Intent(CommentsActivity.this, AddComment.class);
+                    ii.putExtra("commentPost",prod_id);
+                    startActivityForResult(ii,96);
+                }
             }
         }, new Response.ErrorListener() {
 
