@@ -14,7 +14,7 @@
     <string name="linkPushNotif">http://shubhasharon.com/</string>
 
     <!-- google play store app link -->
-    <string name="playStoreLink">https://play.google.com/store/apps/details?id=PACKAGE</string>
+    <string name="playStoreLink">https://play.google.com/store/apps/details?id=com.shubhasharon</string>
 
     <!-- Contact us message -->
     <string name="contactUs">our social media profiles </string>

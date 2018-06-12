@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity
     private void shareTextUrl() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_TEXT,"Download Our App:"+getResources().getString(R.string.playStoreLink));
+        shareIntent.putExtra(Intent.EXTRA_TEXT,"To Learn any recipe under just 5 mins download Sharon's recipes App: "+getResources().getString(R.string.playStoreLink));
         startActivity(Intent.createChooser(shareIntent, "Share link using"));
     }
     private void sendTokenToServer(final String token) {
