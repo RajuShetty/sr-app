@@ -24,9 +24,12 @@
     <string name="aboutApp">Sharon's recipes</string>
     <string name="developerName"> Shubha sharon</string>
     <string name="developer_FB_page">https://www.facebook.com/cookwithshubhasharon</string>
+    <string name="description">Shubha sharon is a house wife, cooks amazing food and teaches How to make them easily. Her motto is "Learn any recipe under 5 minutes". She has made hundreds of Indian recipes, creates short and beautiful videos on youtube and also has a website in which she writes detailed step by step instructions for each recipe with photos, and videos.</string>
 
     <!-- AdMob Ids -->
     <string name="banner_home_footer">ca-app-pub-8533004717624284/5967770146</string>
+    <string name="interstitial_full_screen">ca-app-pub-8533004717624284/3062405206</string>
+    <string name="rewarded_video">ca-app-pub-8533004717624284/3885843732</string>
 
 
 
