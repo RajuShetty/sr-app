@@ -30,7 +30,7 @@ public class AboutActivity extends AppCompatActivity {
 
         View aboutPage = new AboutPage(this)
                 .isRTL(false)
-                .setImage(R.drawable.applogo)
+                .setImage(R.drawable.applogot)
                 .setDescription("Shubha sharon is a house wife, cooks amazing food and teaches How to make them easily. Her motto is Learn any recipe under 5 minutes.")
                 .addItem(new Element().setTitle("version 1.0"))
                 .addGroup("Connect with us")

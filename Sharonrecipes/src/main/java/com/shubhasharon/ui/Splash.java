@@ -32,11 +32,11 @@ public class Splash extends SplasherActivity {
     public void initSplasher(SplasherConfig config) {
         config.setReveal_start(Const.START_TOP_LEFT) // anitmation type ..
                 //---------------
-                .setAnimationDuration(4000) // Reveal animation duration ..
+                .setAnimationDuration(2000) // Reveal animation duration ..
                 //---------------
                 .setLogo(R.drawable.splash_logo) // logo src..
                 .setLogo_animation(Techniques.BounceIn) // logo animation ..
-                .setAnimationLogoDuration(1000) // logo animation duration ..
+                .setAnimationLogoDuration(800) // logo animation duration ..
                 .setLogoWidth(600) // logo width ..
                 //---------------
                 .setTitle(getString(R.string.app_name)) // title ..

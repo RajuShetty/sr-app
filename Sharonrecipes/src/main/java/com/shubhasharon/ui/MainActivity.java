@@ -229,9 +229,6 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
 
-        } else if (id == R.id.nav_call) {
-            startActivity(new Intent(this,ContactActivity.class));
-
         } else if (id == R.id.nav_about) {
             startActivity(new Intent(this,AboutActivity.class));
         } else if (id == R.id.nav_manage) {
