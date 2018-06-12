@@ -18,7 +18,7 @@
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/about"
-            android:title="About Application" />
+            android:title="About Sharon" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/share"
