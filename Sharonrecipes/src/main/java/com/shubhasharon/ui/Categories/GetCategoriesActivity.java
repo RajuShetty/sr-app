@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -16,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.shubhasharon.NoInternetChecker;
 import com.shubhasharon.R;
 import com.shubhasharon.modals.Article;
 import com.shubhasharon.modals.Category;
@@ -37,7 +40,7 @@ public class GetCategoriesActivity extends AppCompatActivity{
     ArrayList<Category> feed = new ArrayList<>();
     int next=2;
     LinearLayoutManager layoutManager;
-
+    com.victor.loading.rotate.RotateLoading loader;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +51,10 @@ public class GetCategoriesActivity extends AppCompatActivity{
         initData();
     }
     public void initView(){
+
+        loader=(com.victor.loading.rotate.RotateLoading)findViewById(R.id.bookloading);
         recyclerView = findViewById(R.id.recy);
+        new NoInternetChecker(GetCategoriesActivity.this);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         DividerItemDecoration mDividerItemDecoration = new DividerItemDecoration(
@@ -56,6 +62,8 @@ public class GetCategoriesActivity extends AppCompatActivity{
                 layoutManager.getOrientation()
         );
         recyclerView.addItemDecoration(mDividerItemDecoration);
+
+
     }
     public void initData(){
         getByCategory(1);
@@ -74,6 +82,7 @@ public class GetCategoriesActivity extends AppCompatActivity{
     }
 
     public void getByCategory(int page) {
+        loader.start();
         if(next>1&&feed.size()>0){
             feed.add(null);
             adapter.notifyItemInserted(feed.size()-1);
@@ -102,6 +111,8 @@ public class GetCategoriesActivity extends AppCompatActivity{
                     e.printStackTrace();
                 }
                 adapter.notifyDataSetChanged();
+                loader.stop();
+                loader.setVisibility(View.GONE);
             }
         }, new Response.ErrorListener() {
 

@@ -63,12 +63,21 @@
                 android:gravity="center"
                 android:id="@+id/title"
                 android:layout_marginTop="10dp" />
+            <com.victor.loading.rotate.RotateLoading
+                android:id="@+id/rotateloading"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:loading_width="5dp"
+                android:layout_gravity="center_horizontal"
+                app:loading_color="@color/colorAccent"
+                android:layout_centerInParent="true"/>
 
             <WebView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/web"
                 android:layoutDirection="rtl" />
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

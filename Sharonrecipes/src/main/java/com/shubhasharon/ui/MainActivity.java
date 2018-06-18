@@ -1,8 +1,11 @@
 package com.shubhasharon.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
@@ -11,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -35,10 +39,16 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.shubhasharon.Ads;
+import com.shubhasharon.NoInternetChecker;
+import com.shubhasharon.Saver;
 import com.shubhasharon.ui.Categories.GetCategoriesActivity;
+import com.shubhasharon.ui.Home.OpenArticle;
 import com.shubhasharon.utils.CustomTypefaceSpan;
 import com.shubhasharon.FCM.FCMTokenRefreshListenerService;
 import com.shubhasharon.FCM.MyFCMService;
@@ -47,7 +57,9 @@ import com.shubhasharon.ui.Home.HomeFragment;
 import com.shubhasharon.utils.MyData;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -59,14 +71,15 @@ public class MainActivity extends AppCompatActivity
     SharedPreferences preferences;
 
 
-
+    int id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         setContentView(R.layout.activity_main);
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        new NoInternetChecker(MainActivity.this);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         startService(new Intent(this, MyFCMService.class));
         startService(new Intent(this, FCMTokenRefreshListenerService.class));
 
@@ -126,6 +139,8 @@ public class MainActivity extends AppCompatActivity
         if (!preferences.getBoolean("token_sent", false))
             sendTokenToServer(FirebaseInstanceId.getInstance().getToken());
 
+
+        showRating();
     }
 
     private void changeTabsFont() {
@@ -225,19 +240,25 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+          id = item.getItemId();
 
-        if (id == R.id.nav_home) {
+            if (id == R.id.nav_home) {
 
-        } else if (id == R.id.nav_about) {
-            startActivity(new Intent(this,AboutActivity.class));
-        } else if (id == R.id.nav_manage) {
-            shareTextUrl();
-        }else if(id == R.id.nav_fav){
-            startActivity(new Intent(this,FavActivity.class));
-        }else if(id == R.id.nav_categories){
-            startActivity(new Intent(this,GetCategoriesActivity.class));
-        }
+            } else if (id == R.id.nav_about) {
+                startActivity(new Intent(MainActivity.this,AboutActivity.class));
+            } else if (id == R.id.nav_rate) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
+            }else if (id == R.id.nav_manage) {
+                shareTextUrl();
+            }else if(id == R.id.nav_fav){
+                startActivity(new Intent(MainActivity.this,FavActivity.class));
+            }else if(id == R.id.nav_categories){
+                startActivity(new Intent(MainActivity.this,GetCategoriesActivity.class));
+            }
+
+
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -294,5 +315,52 @@ public class MainActivity extends AppCompatActivity
             }
         });
         Volley.newRequestQueue(this).add(request);
+    }
+
+    public void showRating(){
+        Saver sc=new Saver(MainActivity.this);
+       if(sc.isForToday()){
+           if(sc.isRated()){
+
+               Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+               int d=calendar.get(Calendar.DATE);
+               Log.e("TTX",""+d);
+               if(d%3==0){
+                   Log.e("TTX","x"+d);
+                   AlertDialog.Builder builder;
+                   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                       builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+                   } else {
+                       builder = new AlertDialog.Builder(MainActivity.this);
+                   }
+                   builder.setTitle("Rate us !")
+                           .setMessage("Do you want to rate us ?")
+                           .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                               public void onClick(DialogInterface dialog, int which) {
+                                   startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
+
+                               }
+                           })
+                           .setNegativeButton("Later", new DialogInterface.OnClickListener() {
+                               public void onClick(DialogInterface dialog, int which) {
+                                   Saver sc=new Saver(MainActivity.this);
+                                   sc.setForToday(false);
+                               }
+                           }).setNeutralButton("Never", new DialogInterface.OnClickListener() {
+                       public void onClick(DialogInterface dialog, int which) {
+                           Saver sc=new Saver(MainActivity.this);
+                           sc.setRated(false);
+                       }
+                   })
+                           .setIcon(android.R.drawable.ic_dialog_alert)
+                           .show();
+               }else {
+
+                   sc.setRated(true);
+               }
+
+           }
+       }
+
     }
 }

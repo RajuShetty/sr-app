@@ -81,6 +81,7 @@ public class CatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (holder instanceof LoadingViewHolder) {
             LoadingViewHolder loadingViewHolder = (LoadingViewHolder) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
+
         }
 
     }
@@ -122,6 +123,7 @@ public class CatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             super(itemView);
             progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
             progressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.SRC_ATOP);
+
         }
     }
 }

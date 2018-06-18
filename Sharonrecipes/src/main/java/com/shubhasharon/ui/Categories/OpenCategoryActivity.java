@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -15,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.shubhasharon.NoInternetChecker;
 import com.shubhasharon.R;
 import com.shubhasharon.modals.Article;
 import com.shubhasharon.ui.Home.HomeAdapter;
@@ -36,11 +38,13 @@ public class OpenCategoryActivity extends AppCompatActivity{
     int position = 0;
     int next=2;
     LinearLayoutManager layoutManager;
-
+    com.victor.loading.rotate.RotateLoading loader;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment);
+        new NoInternetChecker(OpenCategoryActivity.this);
+        loader=(com.victor.loading.rotate.RotateLoading)findViewById(R.id.bookloading);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(getIntent().getStringExtra("title"));
         recyclerView = findViewById(R.id.recy);
@@ -66,7 +70,7 @@ public class OpenCategoryActivity extends AppCompatActivity{
         });
     }
     public void getByCategory(String category, int page) {
-
+        loader.start();
         String url = getString(R.string.link)+ "get_category_posts/?id="+category+"&page="+page+"&count=4";
         StringRequest postrequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -95,6 +99,8 @@ public class OpenCategoryActivity extends AppCompatActivity{
                     e.printStackTrace();
                 }
                 adapter.notifyDataSetChanged();
+                loader.stop();
+                loader.setVisibility(View.GONE);
             }
         }, new Response.ErrorListener() {
 

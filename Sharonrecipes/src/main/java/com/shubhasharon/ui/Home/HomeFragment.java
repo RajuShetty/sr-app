@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.shubhasharon.NoInternetChecker;
 import com.shubhasharon.modals.Article;
 import com.shubhasharon.modals.ItemComment;
 import com.shubhasharon.utils.EndlessRecyclerOnScrollListener;
@@ -43,6 +44,7 @@ public class HomeFragment extends Fragment {
     ArrayList<Article> feed = new ArrayList<>();
     int position = 0;
     int next=1;
+    com.victor.loading.rotate.RotateLoading loader;
     LinearLayoutManager layoutManager;
     private boolean _areLecturesLoaded = false;
 
@@ -60,6 +62,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment, container, false);
+        loader=(com.victor.loading.rotate.RotateLoading)rootView.findViewById(R.id.bookloading);
         recyclerView = rootView.findViewById(R.id.recy);
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -98,17 +101,22 @@ public class HomeFragment extends Fragment {
                         n.setAuther(auth.getString("name"));
 
                         feed.add(n);
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                adapter.notifyDataSetChanged();
+                 adapter.notifyDataSetChanged();
+                loader.stop();
+                loader.setVisibility(View.GONE);
+
             }
         }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.i("wail error ", error.toString());
+                loader.stop();
             }
         }) {
             @Override
@@ -155,6 +163,8 @@ public class HomeFragment extends Fragment {
                     e.printStackTrace();
                 }
                 adapter.notifyDataSetChanged();
+                loader.stop();
+                loader.setVisibility(View.GONE);
             }
         }, new Response.ErrorListener() {
 
@@ -184,6 +194,7 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void run() {
                     loadForFisrtSeen();
+                    loader.start();
                     _areLecturesLoaded = true;
                 }
             }, 1000);

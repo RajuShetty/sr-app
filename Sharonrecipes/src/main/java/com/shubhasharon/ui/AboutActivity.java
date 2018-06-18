@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.shubhasharon.NoInternetChecker;
 import com.shubhasharon.R;
 
 import java.util.Calendar;
@@ -27,7 +28,7 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about);
-
+        new NoInternetChecker(AboutActivity.this);
         View aboutPage = new AboutPage(this)
                 .isRTL(false)
                 .setImage(R.drawable.applogot)

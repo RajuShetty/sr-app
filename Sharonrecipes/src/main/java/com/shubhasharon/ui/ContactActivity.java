@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.shubhasharon.NoInternetChecker;
 import com.shubhasharon.R;
 
 /**
@@ -23,6 +24,7 @@ public class ContactActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contact);
         fcb= (ImageView) findViewById(R.id.fcb);
+        new NoInternetChecker(ContactActivity.this);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         fcb.setOnClickListener(new View.OnClickListener() {
             @Override

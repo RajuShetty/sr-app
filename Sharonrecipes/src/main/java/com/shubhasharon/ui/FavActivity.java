@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 
+import com.shubhasharon.NoInternetChecker;
 import com.shubhasharon.modals.Article;
 import com.shubhasharon.utils.EndlessRecyclerOnScrollListener;
 import com.shubhasharon.R;
@@ -36,6 +37,7 @@ public class FavActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment);
+        new NoInternetChecker(FavActivity.this);
         getSupportActionBar().setTitle("My Favorites");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recyclerView = (RecyclerView) findViewById(R.id.recy);

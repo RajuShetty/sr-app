@@ -1,29 +1,51 @@
 package com.shubhasharon.ui.Home;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
+import com.shubhasharon.Ads;
+import com.shubhasharon.NoInternetChecker;
 import com.shubhasharon.R;
 import com.shubhasharon.ui.Comments.CommentsActivity;
+import com.shubhasharon.ui.MainActivity;
 import com.shubhasharon.utils.Css;
+
+import java.util.Random;
 
 /**
  * Created by wail babou on 2016-12-24.
@@ -36,12 +58,15 @@ public class OpenArticle  extends AppCompatActivity{
     FloatingActionButton share,pc,comment;
     Intent data;
     Toolbar toolbar;
+    Dialog builder;
+    ImageView imageView;
+    com.victor.loading.rotate.RotateLoading loader;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.open_article);
-
+        loader=(com.victor.loading.rotate.RotateLoading)findViewById(R.id.rotateloading);
         toolbar= (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
@@ -50,6 +75,10 @@ public class OpenArticle  extends AppCompatActivity{
         web= (WebView) findViewById(R.id.web);
         image= findViewById(R.id.imageheader);
         data = getIntent();
+        new NoInternetChecker(OpenArticle.this);
+
+
+
         Glide
                 .with(this)
                 .load(data.getStringExtra("logo"))
@@ -121,13 +150,19 @@ public class OpenArticle  extends AppCompatActivity{
     class Browser
             extends WebViewClient
     {
-        Browser() {}
+        Browser() {
+
+        }
 
         public boolean shouldOverrideUrlLoading(WebView paramWebView, String paramString)
         {
             paramWebView.loadUrl(paramString);
             return true;
         }
+
+
+
+
     }
 
     public class MyWebClient
@@ -138,6 +173,8 @@ public class OpenArticle  extends AppCompatActivity{
         protected FrameLayout mFullscreenContainer;
         private int mOriginalOrientation;
         private int mOriginalSystemUiVisibility;
+
+
 
         public MyWebClient() {}
 
@@ -157,6 +194,21 @@ public class OpenArticle  extends AppCompatActivity{
             setRequestedOrientation(this.mOriginalOrientation);
             this.mCustomViewCallback.onCustomViewHidden();
             this.mCustomViewCallback = null;
+        }
+
+        @Override
+        public void onProgressChanged(WebView view, int newProgress) {
+            super.onProgressChanged(view, newProgress);
+            Log.e("LoadingT",""+newProgress);
+            if (newProgress == 100) {
+                loader.stop();
+                loader.setVisibility(View.GONE);
+
+            } else {
+
+                loader.start();
+
+            }
         }
 
         public void onShowCustomView(View paramView, WebChromeClient.CustomViewCallback paramCustomViewCallback)
